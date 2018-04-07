@@ -46,6 +46,15 @@ public class Grid : MonoBehaviour {
         // Give the vertices that were just created to the mesh
         mesh.vertices = vertices;
 
+        // Remember, only the triangles with vertices in the clockwise order are
+        // displayed
+        int[] triangles = new int[6];
+        triangles[0] = 0;
+        triangles[3] = triangles[2] = 1;
+        triangles[4] = triangles[1] = xSize + 1;
+        triangles[5] = xSize + 2;
+
+        mesh.triangles = triangles;
     }
 
     // Called by Unity automatically
