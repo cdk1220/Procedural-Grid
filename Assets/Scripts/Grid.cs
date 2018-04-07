@@ -7,7 +7,11 @@ public class Grid : MonoBehaviour {
     // Sizd of the mesh to be generated
     public int xSize, ySize;
 
+    // Set of vectors for the mesh
     private Vector3[] vertices;
+
+    // Reference to the mesh in the mesh filter
+    private Mesh mesh;
 
     private void Awake() {
 
@@ -21,8 +25,14 @@ public class Grid : MonoBehaviour {
         // Time interval between drawing two gizmos
         WaitForSeconds wait = new WaitForSeconds(0.05f);
 
+        // Create new mesh and assign it to the filters mesh and also keep a reference
+        // to ourselves
+        GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        mesh.name = "Procedural Grid";
+
         // There is always one more vertex than tiles in each dimension
         vertices = new Vector3[(xSize + 1) * (ySize + 1)];
+
 
         // Positioning the vertices
         for (int i = 0, y = 0; y <= ySize; y++) {
@@ -32,6 +42,10 @@ public class Grid : MonoBehaviour {
                 yield return wait;
             }
         }
+
+        // Give the vertices that were just created to the mesh
+        mesh.vertices = vertices;
+
     }
 
     // Called by Unity automatically
