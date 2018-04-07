@@ -11,13 +11,16 @@ public class Grid : MonoBehaviour {
 
     private void Awake() {
 
-        // Generate as soon as empty game object awakens
-        Generate();
+        // Generate as soon as empty game object awakens but visualize it
+        StartCoroutine(Generate());
     }
 
     // This will generate the mesh
-    private void Generate()
+    private IEnumerator Generate()
     {
+        // Time interval between drawing two gizmos
+        WaitForSeconds wait = new WaitForSeconds(0.05f);
+
         // There is always one more vertex than tiles in each dimension
         vertices = new Vector3[(xSize + 1) * (ySize + 1)];
 
@@ -25,6 +28,8 @@ public class Grid : MonoBehaviour {
         for (int i = 0, y = 0; y <= ySize; y++) {
             for (int x = 0; x <= xSize; x++, i++) {
                 vertices[i] = new Vector3(x, y);
+
+                yield return wait;
             }
         }
     }
