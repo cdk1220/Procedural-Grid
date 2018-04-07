@@ -39,8 +39,10 @@ public class Grid : MonoBehaviour {
 
         Gizmos.color = Color.black;
 
+        // Gizmos will be drawn into world space directly if the first arg to DrawSphere
+        // function is vertices[i] and therefore wouldn't move when the object moves
         for (int i = 0; i < vertices.Length; i++) {
-            Gizmos.DrawSphere(vertices[i], 0.1f);
+            Gizmos.DrawSphere(transform.TransformPoint(vertices[i]), 0.1f);
         }
     }
 
