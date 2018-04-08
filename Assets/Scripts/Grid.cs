@@ -35,6 +35,9 @@ public class Grid : MonoBehaviour {
 
         Vector2[] uv = new Vector2[vertices.Length];
 
+        Vector4[] tangents = new Vector4[vertices.Length];
+        Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
+
 
         // Positioning the vertices
         for (int i = 0, y = 0; y <= ySize; y++) {
@@ -42,6 +45,8 @@ public class Grid : MonoBehaviour {
                 vertices[i] = new Vector3(x, y);
 
                 uv[i] = new Vector2((float)x / xSize, (float)y / ySize);
+
+                tangents[i] = tangent;
             }
         }
 
@@ -49,6 +54,10 @@ public class Grid : MonoBehaviour {
         mesh.vertices = vertices;
 
         mesh.uv = uv;
+
+        mesh.tangents = tangents;
+
+       
 
         // Each quad has two triangles, and each triangle has three vertices
         int[] triangles = new int[xSize * ySize * 2 * 3];
