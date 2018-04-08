@@ -60,6 +60,7 @@ public class Grid : MonoBehaviour {
             }
         }
         mesh.triangles = triangles;
+        mesh.RecalculateNormals();
     }
 
     // Called by Unity automatically
