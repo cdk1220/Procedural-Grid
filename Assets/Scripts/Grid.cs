@@ -16,11 +16,11 @@ public class Grid : MonoBehaviour {
     private void Awake() {
 
         // Generate as soon as empty game object awakens but visualize it
-        StartCoroutine(Generate());
+        Generate();
     }
 
     // This will generate the mesh
-    private IEnumerator Generate()
+    private void Generate()
     {
         // Time interval between drawing two gizmos
         WaitForSeconds wait = new WaitForSeconds(0.05f);
@@ -38,8 +38,6 @@ public class Grid : MonoBehaviour {
         for (int i = 0, y = 0; y <= ySize; y++) {
             for (int x = 0; x <= xSize; x++, i++) {
                 vertices[i] = new Vector3(x, y);
-
-                yield return wait;
             }
         }
 
@@ -50,39 +48,18 @@ public class Grid : MonoBehaviour {
         int[] triangles = new int[xSize * ySize * 2 * 3];
 
         // Using loop to create triangles
-        for (int y = 0; y < ySize; y++) {
-
-            int rowOffset = y * xSize * 6;
-            for (int x = 0; x < xSize; x++) {
-                int intoTheRow = 6 * x;
+        for (int ti = 0, vi = 0, y = 0; y < ySize; y++, vi++) {
+            for (int x = 0; x < xSize; x++, ti += 6, vi++) {
 
                 // Remember, only the triangles with vertices in the clockwise order are
                 // displayed
-                triangles[intoTheRow + rowOffset] = y * (xSize + 1) + x;
-                triangles[intoTheRow + 1 + rowOffset] = (y + 1) * (xSize + 1) + x;
-                triangles[intoTheRow + 2 + rowOffset] = y * (xSize + 1) + x + 1;
-                triangles[intoTheRow + 3 + rowOffset] = y * (xSize + 1) + x + 1;
-                triangles[intoTheRow + 4 + rowOffset] = (y + 1) * (xSize + 1) + x;
-                triangles[intoTheRow + 5 + rowOffset] = (y + 1) * (xSize + 1) + x + 1;
-
-                if (y == 1)
-                {
-                    Debug.Log(y * xSize + x);
-                    Debug.Log((y + 1) * xSize + x + 1);
-                    Debug.Log(y * xSize + x + 1);
-                    Debug.Log(y * xSize + x + 1);
-                    Debug.Log((y + 1) * xSize + x + 1);
-                    Debug.Log((y + 1) * xSize + x + 2);
-                }
-
-                mesh.triangles = triangles;
-                yield return wait;
-
+                triangles[ti] = vi;
+                triangles[ti + 3] = triangles[ti + 2] = vi + 1;
+                triangles[ti + 4] = triangles[ti + 1] = vi + xSize + 1;
+                triangles[ti + 5] = vi + xSize + 2;
             }
-
-
         }
-
+        mesh.triangles = triangles;
     }
 
     // Called by Unity automatically
