@@ -33,16 +33,22 @@ public class Grid : MonoBehaviour {
         // There is always one more vertex than tiles in each dimension
         vertices = new Vector3[(xSize + 1) * (ySize + 1)];
 
+        Vector2[] uv = new Vector2[vertices.Length];
+
 
         // Positioning the vertices
         for (int i = 0, y = 0; y <= ySize; y++) {
             for (int x = 0; x <= xSize; x++, i++) {
                 vertices[i] = new Vector3(x, y);
+
+                uv[i] = new Vector2((float)x / xSize, (float)y / ySize);
             }
         }
 
         // Give the vertices that were just created to the mesh
         mesh.vertices = vertices;
+
+        mesh.uv = uv;
 
         // Each quad has two triangles, and each triangle has three vertices
         int[] triangles = new int[xSize * ySize * 2 * 3];
@@ -60,7 +66,7 @@ public class Grid : MonoBehaviour {
             }
         }
         mesh.triangles = triangles;
-
+        mesh.RecalculateNormals();
     }
 
     // Called by Unity automatically
