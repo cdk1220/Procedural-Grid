@@ -22,9 +22,6 @@ public class Grid : MonoBehaviour {
     // This will generate the mesh
     private void Generate()
     {
-        // Time interval between drawing two gizmos
-        WaitForSeconds wait = new WaitForSeconds(0.05f);
-
         // Create new mesh and assign it to the filters mesh and also keep a reference
         // to ourselves
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
@@ -33,8 +30,10 @@ public class Grid : MonoBehaviour {
         // There is always one more vertex than tiles in each dimension
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
+        // Texture coordinates
         Vector2[] uv = new Vector2[vertices.Length];
 
+        // Tangent stuff
         Vector4[] tangents = new Vector4[vertices.Length];
         Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
 
@@ -53,8 +52,10 @@ public class Grid : MonoBehaviour {
         // Give the vertices that were just created to the mesh
         mesh.vertices = vertices;
 
+        // Setting uv coordinates of the mesh
         mesh.uv = uv;
 
+        // Setting tangents of the mesh
         mesh.tangents = tangents;
 
        
@@ -74,27 +75,13 @@ public class Grid : MonoBehaviour {
                 triangles[ti + 5] = vi + xSize + 2;
             }
         }
+
+        // Set triangles
         mesh.triangles = triangles;
+
+        // Calculate normals
         mesh.RecalculateNormals();
+
     }
 
-    // Called by Unity automatically
-    private void OnDrawGizmos() {
-
-        // Also invoked in the editor mode when vertices are not there, simply return
-        if (vertices == null) {
-            return;
-        }
-
-        Gizmos.color = Color.black;
-
-        // Gizmos will be drawn into world space directly if the first arg to DrawSphere
-        // function is vertices[i] and therefore wouldn't move when the object moves
-        for (int i = 0; i < vertices.Length; i++) {
-            Gizmos.DrawSphere(transform.TransformPoint(vertices[i]), 0.1f);
-        }
-    }
-
-
-   
 }
