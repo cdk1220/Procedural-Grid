@@ -5,7 +5,7 @@ using System.Collections;
 public class Grid : MonoBehaviour {
 
     // Sizd of the mesh to be generated
-    public int xSize, ySize;
+    public int xSize, zSize;
 
     // Set of vectors for the mesh
     private Vector3[] vertices;
@@ -31,7 +31,7 @@ public class Grid : MonoBehaviour {
         mesh.name = "Procedural Grid";
 
         // There is always one more vertex than tiles in each dimension
-        vertices = new Vector3[(xSize + 1) * (ySize + 1)];
+        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
         Vector2[] uv = new Vector2[vertices.Length];
 
@@ -40,11 +40,11 @@ public class Grid : MonoBehaviour {
 
 
         // Positioning the vertices
-        for (int i = 0, y = 0; y <= ySize; y++) {
+        for (int i = 0, z = 0; z <= zSize; z++) {
             for (int x = 0; x <= xSize; x++, i++) {
-                vertices[i] = new Vector3(x, y);
+                vertices[i] = new Vector3(x, 0f, z);
 
-                uv[i] = new Vector2((float)x / xSize, (float)y / ySize);
+                uv[i] = new Vector2((float)x / xSize, (float)z / zSize);
 
                 tangents[i] = tangent;
             }
@@ -60,10 +60,10 @@ public class Grid : MonoBehaviour {
        
 
         // Each quad has two triangles, and each triangle has three vertices
-        int[] triangles = new int[xSize * ySize * 2 * 3];
+        int[] triangles = new int[xSize * zSize * 2 * 3];
 
         // Using loop to create triangles
-        for (int ti = 0, vi = 0, y = 0; y < ySize; y++, vi++) {
+        for (int ti = 0, vi = 0, z = 0; z < zSize; z++, vi++) {
             for (int x = 0; x < xSize; x++, ti += 6, vi++) {
 
                 // Remember, only the triangles with vertices in the clockwise order are
