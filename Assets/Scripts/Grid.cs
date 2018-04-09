@@ -19,7 +19,7 @@ public class Grid : MonoBehaviour {
     public float timeScale = 1;
 
     private float xOffset;
-    private float yOffset;
+    private float zOffset;
 
     private void Awake() {
 
@@ -30,7 +30,7 @@ public class Grid : MonoBehaviour {
     void Update() {
         PerlinNoise();
         xOffset += Time.deltaTime * timeScale;
-        yOffset += Time.deltaTime * timeScale;
+        zOffset += Time.deltaTime * timeScale;
     }
 
 
@@ -111,13 +111,18 @@ public class Grid : MonoBehaviour {
 
         // Set the vertices after modfying 
         mesh.vertices = vertices;
+
+        // Redo normals and tangents
+        mesh.RecalculateNormals();
+        mesh.RecalculateTangents();
+
     }
 
     // Helper function
-    float CalculateHeight(float x, float y) {
+    float CalculateHeight(float x, float z) {
         float xCord = x * scale + xOffset;
-        float yCord = y * scale + yOffset;
+        float zCord = z * scale + zOffset;
 
-        return Mathf.PerlinNoise(xCord, yCord);
+        return Mathf.PerlinNoise(xCord, zCord);
     }
 }
