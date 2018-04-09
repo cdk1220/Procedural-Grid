@@ -13,11 +13,26 @@ public class Grid : MonoBehaviour {
     // Reference to the mesh in the mesh filter
     private Mesh mesh;
 
+    // Perlin noise related fields
+    public float power = 3;
+    public float scale = 1;
+    public float timeScale = 1;
+
+    private float xOffset;
+    private float yOffset;
+
     private void Awake() {
 
         // Generate as soon as empty game object awakens but visualize it
         Generate();
     }
+
+    void Update() {
+        PerlinNoise();
+        xOffset += Time.deltaTime * timeScale;
+        yOffset += Time.deltaTime * timeScale;
+    }
+
 
     // This will generate the mesh
     private void Generate()
@@ -84,4 +99,25 @@ public class Grid : MonoBehaviour {
 
     }
 
+
+    // Create noise
+    private void PerlinNoise() {
+
+        // Get vertices from mesh
+        vertices = mesh.vertices;
+        for (int i = 0; i < vertices.Length; i++) {
+            vertices[i].y = CalculateHeight(vertices[i].x, vertices[i].z) * power;
+        }
+
+        // Set the vertices after modfying 
+        mesh.vertices = vertices;
+    }
+
+    // Helper function
+    float CalculateHeight(float x, float y) {
+        float xCord = x * scale + xOffset;
+        float yCord = y * scale + yOffset;
+
+        return Mathf.PerlinNoise(xCord, yCord);
+    }
 }
